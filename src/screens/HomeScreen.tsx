@@ -1,38 +1,59 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { AppStyles } from '../styles/AppStyles';
-import { mockJobs, Job } from '../data/mockJobs';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useJobs } from '../hooks/useJobs';
+import { AppStyles, Colors } from '../styles/AppStyles';
+import { Job } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParamList } from '../navigation/HomeStack';
 
-// Типизируем пропсы экрана с навигацией
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'HomeList'>;
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
-  const [jobs, setJobs] = useState<Job[]>(mockJobs);
+  const { jobs, loading, error, refetch } = useJobs();
 
   const handleJobPress = (job: Job) => {
-    // Переход на детальный экран с передачей данных вакансии
     navigation.navigate('JobDetail', { job });
   };
 
   const renderJobCard = ({ item }: { item: Job }) => (
-    <TouchableOpacity onPress={() => handleJobPress(item)}>
+    <TouchableOpacity onPress={() => handleJobPress(item)} activeOpacity={0.7}>
       <View style={AppStyles.jobCard}>
         <Text style={AppStyles.jobTitle}>{item.title}</Text>
         <Text style={AppStyles.jobCompany}>{item.company}</Text>
         <Text style={AppStyles.jobCountry}>
-          {item.location}, {item.country}
+          📍 {item.location}, {item.country}
         </Text>
         {item.salary_min && (
-          <Text style={{ fontSize: 12, color: '#0077cc', marginTop: 8 }}>
-            💰 {item.salary_min.toLocaleString()} {item.currency || 'USD'} 
-            {item.salary_max ? ` - ${item.salary_max.toLocaleString()} ${item.currency || 'USD'}` : ''}
+          <Text style={{ fontSize: 12, color: Colors.primary, marginTop: 8 }}>
+            💰 {item.salary_min.toLocaleString()} {item.currency}
+            {item.salary_max ? ` - ${item.salary_max.toLocaleString()} ${item.currency}` : ''}
           </Text>
         )}
       </View>
     </TouchableOpacity>
   );
+
+  if (loading && jobs.length === 0) {
+    return (
+      <View style={[AppStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+        <Text style={{ marginTop: 20, color: Colors.secondary }}>Загрузка вакансий...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[AppStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={{ color: 'red', textAlign: 'center', marginBottom: 20 }}>{error}</Text>
+        <TouchableOpacity 
+          onPress={refetch} 
+          style={{ backgroundColor: Colors.primary, padding: 12, borderRadius: 8 }}
+        >
+          <Text style={{ color: Colors.white, fontWeight: 'bold' }}>Повторить</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={AppStyles.container}>
@@ -43,6 +64,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderJobCard}
         showsVerticalScrollIndicator={false}
+        onRefresh={refetch}
+        refreshing={loading}
       />
     </View>
   );

@@ -1,38 +1,28 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { AppStyles, Colors } from '../styles/AppStyles';
-import { Job } from '../data/mockJobs';
+import { Job } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
+import { HomeStackParamList } from '../navigation/HomeStack';
 
-// Определяем типы для параметров навигации
-type RootStackParamList = {
-  HomeList: undefined;
-  JobDetail: { job: Job };
-};
+type JobDetailScreenProps = StackScreenProps<HomeStackParamList, 'JobDetail'>;
 
-// Типизируем пропсы экрана
-type JobDetailScreenProps = StackScreenProps<RootStackParamList, 'JobDetail'>;
-
-export default function JobDetailScreen({ route, navigation }: JobDetailScreenProps) {
-  // Получаем вакансию из параметров навигации
+export default function JobDetailScreen({ route }: JobDetailScreenProps) {
   const { job } = route.params;
 
-  // Форматируем зарплату (если есть)
   const formatSalary = () => {
     if (job.salary_min && job.salary_max) {
-      return `${job.salary_min.toLocaleString()} - ${job.salary_max.toLocaleString()} ${job.currency || 'USD'}`;
+      return `${job.salary_min.toLocaleString()} - ${job.salary_max.toLocaleString()} ${job.currency}`;
     }
     if (job.salary_min) {
-      return `от ${job.salary_min.toLocaleString()} ${job.currency || 'USD'}`;
+      return `от ${job.salary_min.toLocaleString()} ${job.currency}`;
     }
     if (job.salary_max) {
-      return `до ${job.salary_max.toLocaleString()} ${job.currency || 'USD'}`;
+      return `до ${job.salary_max.toLocaleString()} ${job.currency}`;
     }
     return 'Не указана';
   };
 
-  // Обработка нажатия на кнопку "Откликнуться"
   const handleApply = () => {
-    // Пока просто покажем уведомление, позже сделаем форму отклика
     alert(`Отклик на вакансию "${job.title}" будет отправлен`);
   };
 
@@ -52,7 +42,7 @@ export default function JobDetailScreen({ route, navigation }: JobDetailScreenPr
 
       <Text style={AppStyles.sectionTitle}>Описание</Text>
       <Text style={AppStyles.detailDescription}>
-        {job.description || 'Описание отсутствует. Пожалуйста, посетите оригинальную страницу вакансии для получения полной информации.'}
+        {job.description || 'Описание отсутствует.'}
       </Text>
 
       {job.requirements && job.requirements.length > 0 && (
