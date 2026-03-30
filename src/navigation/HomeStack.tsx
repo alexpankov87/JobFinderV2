@@ -26,7 +26,7 @@ export default function HomeStack() {
       <Stack.Screen 
         name="HomeList" 
         component={HomeScreen} 
-        options={{ title: 'Вакансии' }}
+        options={{ title: '' }}
       />
       <Stack.Screen 
         name="JobDetail" 

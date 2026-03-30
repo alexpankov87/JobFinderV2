@@ -35,17 +35,23 @@ export default function App() {
         <Tab.Screen 
           name="Главная" 
           component={HomeStack} 
-          options={{ title: 'Вакансии' }}
+          options={{ title: 'Главная',
+            tabBarLabel: 'Главная',
+          }}
         />
         <Tab.Screen 
           name="Избранное" 
           component={FavoritesScreen} 
-          options={{ title: 'Избранное' }}
+          options={{ title: 'Избранное',
+            tabBarLabel: 'Избранное',
+          }}
         />
         <Tab.Screen 
           name="Профиль" 
           component={ProfileScreen} 
-          options={{ title: 'Профиль' }}
+          options={{ title: 'Профиль',
+            tabBarLabel: 'Профиль',
+          }}
         />
       </Tab.Navigator>
     </NavigationContainer>

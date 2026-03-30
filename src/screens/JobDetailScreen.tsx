@@ -1,13 +1,16 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParamList } from '../navigation/HomeStack';
+import ApplyModal from '../components/ApplyModal';
 
 type JobDetailScreenProps = StackScreenProps<HomeStackParamList, 'JobDetail'>;
 
 export default function JobDetailScreen({ route }: JobDetailScreenProps) {
   const { job } = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
 
   const formatSalary = () => {
     if (job.salary_min && job.salary_max) {
@@ -23,42 +26,56 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
   };
 
   const handleApply = () => {
-    alert(`Отклик на вакансию "${job.title}" будет отправлен`);
+    setModalVisible(true);
+  };
+
+  const handleApplySuccess = () => {
+    // Можно добавить дополнительную логику после успешного отклика
+    console.log('Отклик успешно отправлен');
   };
 
   return (
-    <ScrollView style={AppStyles.detailContainer}>
-      <Text style={AppStyles.detailTitle}>{job.title}</Text>
-      <Text style={AppStyles.detailCompany}>{job.company}</Text>
-      <Text style={AppStyles.detailLocation}>
-        📍 {job.location}, {job.country}
-      </Text>
-      
-      <View style={AppStyles.detailSalary}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: Colors.primary }}>
-          💰 Зарплата: {formatSalary()}
+    <>
+      <ScrollView style={AppStyles.detailContainer}>
+        <Text style={AppStyles.detailTitle}>{job.title}</Text>
+        <Text style={AppStyles.detailCompany}>{job.company}</Text>
+        <Text style={AppStyles.detailLocation}>
+          📍 {job.location}, {job.country}
         </Text>
-      </View>
+        
+        <View style={AppStyles.detailSalary}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: Colors.primary }}>
+            💰 Зарплата: {formatSalary()}
+          </Text>
+        </View>
 
-      <Text style={AppStyles.sectionTitle}>Описание</Text>
-      <Text style={AppStyles.detailDescription}>
-        {job.description || 'Описание отсутствует.'}
-      </Text>
+        <Text style={AppStyles.sectionTitle}>Описание</Text>
+        <Text style={AppStyles.detailDescription}>
+          {job.description || 'Описание отсутствует.'}
+        </Text>
 
-      {job.requirements && job.requirements.length > 0 && (
-        <>
-          <Text style={AppStyles.sectionTitle}>Требования</Text>
-          {job.requirements.map((req, index) => (
-            <Text key={index} style={AppStyles.detailRequirements}>
-              • {req}
-            </Text>
-          ))}
-        </>
-      )}
+        {job.requirements && job.requirements.length > 0 && (
+          <>
+            <Text style={AppStyles.sectionTitle}>Требования</Text>
+            {job.requirements.map((req, index) => (
+              <Text key={index} style={AppStyles.detailRequirements}>
+                • {req}
+              </Text>
+            ))}
+          </>
+        )}
 
-      <TouchableOpacity style={AppStyles.applyButton} onPress={handleApply}>
-        <Text style={AppStyles.applyButtonText}>📩 Откликнуться</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={AppStyles.applyButton} onPress={handleApply}>
+          <Text style={AppStyles.applyButtonText}>📩 Откликнуться</Text>
+        </TouchableOpacity>
+      </ScrollView>
+
+      <ApplyModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        job={job}
+        onSuccess={handleApplySuccess}
+      />
+    </>
   );
 }

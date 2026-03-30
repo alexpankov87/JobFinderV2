@@ -34,8 +34,14 @@ export const AppStyles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 8,
     color: Colors.darkGray,
+  },
+  counter: {
+    textAlign: 'center',
+    color: Colors.secondary,
+    marginBottom: 16,
+    fontSize: 14,
   },
   jobCard: {
     backgroundColor: Colors.white,
@@ -134,5 +140,117 @@ export const AppStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-
+  // Стили для модального окна отклика
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    padding: 20,
+    width: '90%',
+    maxHeight: '80%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.darkGray,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 16,
+    backgroundColor: Colors.white,
+  },
+  textArea: {
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 16,
+    backgroundColor: Colors.white,
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  // Контейнер для списка способов связи
+  contactMethodContainer: {
+    marginBottom: 20,
+  },
+  contactMethodItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightGray,
+  },
+  contactMethodItemSelected: {
+    backgroundColor: '#e6f0fa',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginHorizontal: -8,
+  },
+  contactMethodRadio: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contactMethodRadioSelected: {
+    backgroundColor: Colors.primary,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+  contactMethodIcon: {
+    fontSize: 20,
+    marginRight: 12,
+    width: 32,
+  },
+  contactMethodText: {
+    fontSize: 16,
+    color: Colors.darkGray,
+    flex: 1,
+  },
+  contactMethodTextSelected: {
+    color: Colors.primary,
+    fontWeight: '500',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  modalButtonCancel: {
+    backgroundColor: Colors.lightGray,
+  },
+  modalButtonSubmit: {
+    backgroundColor: Colors.primary,
+  },
+  modalButtonText: {
+    color: Colors.white,
+    fontWeight: 'bold',
+  },
+  modalButtonTextCancel: {
+    color: Colors.darkGray,
+  },
 });

@@ -57,7 +57,12 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
   return (
     <View style={AppStyles.container}>
-      <Text style={AppStyles.title}>Вакансии за рубежом</Text>
+      <Text style={AppStyles.title}>
+        🔍 Вакансии за рубежом
+      </Text>
+      <Text style={AppStyles.counter}>
+        Найдено {jobs.length} вакансий
+      </Text>
       
       <FlatList
         data={jobs}
