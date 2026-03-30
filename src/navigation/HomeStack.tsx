@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import JobDetailScreen from '../screens/JobDetailScreen';
-import { Job } from '../data/mockJobs';
+import { Job } from '../types';
 
 export type HomeStackParamList = {
   HomeList: undefined;
@@ -26,7 +26,7 @@ export default function HomeStack() {
       <Stack.Screen 
         name="HomeList" 
         component={HomeScreen} 
-        options={{ title: 'Вакансии' }}
+        options={{ title: '' }}
       />
       <Stack.Screen 
         name="JobDetail" 
