@@ -1,10 +1,11 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useJobs } from '../hooks/useJobs';
-import { useFavorites } from '../hooks/useFavorites';
+import { useFavorites } from '../context/FavoritesContext';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParamList } from '../navigation/HomeStack';
+
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'HomeList'>;
 

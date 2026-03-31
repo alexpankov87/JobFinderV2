@@ -1,17 +1,20 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useFavorites } from '../hooks/useFavorites';
+import { useFavorites } from '../context/FavoritesContext';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../navigation/HomeStack';
 
+
 type NavigationProp = StackNavigationProp<HomeStackParamList, 'HomeList'>;
+
 
 export default function FavoritesScreen() {
   const navigation = useNavigation<NavigationProp>();
   const { favorites, loading, removeFromFavorites, refetch } = useFavorites();
 
+  console.log('FavoritesScreen рендер, favorites:', favorites);
   const handleJobPress = (job: Job) => {
     navigation.navigate('JobDetail', { job });
   };
