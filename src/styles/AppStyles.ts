@@ -253,4 +253,20 @@ export const AppStyles = StyleSheet.create({
   modalButtonTextCancel: {
     color: Colors.darkGray,
   },
+   // Стили для логотипа и названия (добавляем)
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    gap: 8,
+  },
+  logoIcon: {
+    fontSize: 32,
+  },
+  logoText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: Colors.primary,
+  },
 });
