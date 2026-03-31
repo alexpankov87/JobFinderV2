@@ -1,9 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
 import { HomeStackParamList } from '../navigation/HomeStack';
+import { useState } from 'react';
 import ApplyModal from '../components/ApplyModal';
 
 type JobDetailScreenProps = StackScreenProps<HomeStackParamList, 'JobDetail'>;
@@ -27,11 +27,6 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
 
   const handleApply = () => {
     setModalVisible(true);
-  };
-
-  const handleApplySuccess = () => {
-    // Можно добавить дополнительную логику после успешного отклика
-    console.log('Отклик успешно отправлен');
   };
 
   return (
@@ -74,7 +69,7 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         job={job}
-        onSuccess={handleApplySuccess}
+        onSuccess={() => setModalVisible(false)}
       />
     </>
   );

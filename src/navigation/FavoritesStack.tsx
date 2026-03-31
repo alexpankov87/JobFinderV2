@@ -1,11 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/HomeScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
 import JobDetailScreen from '../screens/JobDetailScreen';
-import { HomeStackParamList } from '../types/navigation';
+import { FavoritesStackParamList } from './types';
 
-const Stack = createStackNavigator<HomeStackParamList>();
+const Stack = createStackNavigator<FavoritesStackParamList>();
 
-export default function HomeStack() {
+export default function FavoritesStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -14,7 +14,7 @@ export default function HomeStack() {
         headerTitleStyle: { fontWeight: 'bold' },
       }}
     >
-      <Stack.Screen name="HomeList" component={HomeScreen} options={{ title: 'Вакансии' }} />
+      <Stack.Screen name="FavoritesList" component={FavoritesScreen} options={{ title: 'Избранное' }} />
       <Stack.Screen name="JobDetail" component={JobDetailScreen} options={{ title: 'Детали вакансии' }} />
     </Stack.Navigator>
   );

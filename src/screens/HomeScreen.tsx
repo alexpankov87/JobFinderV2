@@ -1,20 +1,29 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useJobs } from '../hooks/useJobs';
 import { useFavorites } from '../context/FavoritesContext';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
-import { StackScreenProps } from '@react-navigation/stack';
-import { HomeStackParamList } from '../navigation/HomeStack';
+import { RootStackParamList, MainTabsParamList, HomeStackParamList } from '../types/navigation';
 
+// Тип для навигации из HomeScreen
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
-type HomeScreenProps = StackScreenProps<HomeStackParamList, 'HomeList'>;
-
-export default function HomeScreen({ navigation }: HomeScreenProps) {
+export default function HomeScreen() {
   const { jobs, loading, error, refetch } = useJobs();
   const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites();
 
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
   const handleJobPress = (job: Job) => {
-    navigation.navigate('JobDetail', { job });
+    navigation.navigate('MainTabs', {
+      screen: 'Home',
+      params: {
+        screen: 'JobDetail',
+        params: { job }
+      }
+    });
   };
 
   const handleFavoritePress = (job: Job, event: any) => {
@@ -43,11 +52,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               </Text>
             )}
           </View>
-            <TouchableOpacity onPress={(e) => handleFavoritePress(item, e)}>
-              <Text style={{ fontSize: 24, color: isFavorite(item.id) ? '#FFD700' : '#ccc' }}>
-                {isFavorite(item.id) ? '★' : '☆'}
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={(e) => handleFavoritePress(item, e)}>
+            <Text style={{ fontSize: 24, color: isFavorite(item.id) ? '#FFD700' : '#ccc' }}>
+              {isFavorite(item.id) ? '★' : '☆'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
