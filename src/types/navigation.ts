@@ -1,26 +1,22 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { Job } from './index';
 
-// Типы для стека внутри вкладки "Главная"
-export type HomeStackParamList = {
-  HomeList: undefined;
-  JobDetail: { job: Job };
+// Типы для стека авторизации
+export type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
 };
 
-// Типы для стека внутри вкладки "Избранное"
-export type FavoritesStackParamList = {
-  FavoritesList: undefined;
-  JobDetail: { job: Job };
-};
-
-// Типы для вкладок (Tab Navigator)
+// Типы для главных вкладок (без вложенных стеков)
 export type MainTabsParamList = {
-  Home: NavigatorScreenParams<HomeStackParamList>;
-  Favorites: NavigatorScreenParams<FavoritesStackParamList>;
+  Home: undefined;
+  Favorites: undefined;
   Profile: undefined;
 };
 
-// Корневой стек (Root Stack)
+// Корневой стек — только Auth, MainTabs и JobDetail (доступен отовсюду)
 export type RootStackParamList = {
+  Auth: NavigatorScreenParams<AuthStackParamList>;
   MainTabs: NavigatorScreenParams<MainTabsParamList>;
+  JobDetail: { job: Job };
 };

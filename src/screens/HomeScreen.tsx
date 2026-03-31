@@ -5,7 +5,7 @@ import { useJobs } from '../hooks/useJobs';
 import { useFavorites } from '../context/FavoritesContext';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
-import { RootStackParamList, MainTabsParamList, HomeStackParamList } from '../types/navigation';
+import { RootStackParamList } from '../types/navigation';
 
 // Тип для навигации из HomeScreen
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
@@ -17,13 +17,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const handleJobPress = (job: Job) => {
-    navigation.navigate('MainTabs', {
-      screen: 'Home',
-      params: {
-        screen: 'JobDetail',
-        params: { job }
-      }
-    });
+    navigation.navigate('JobDetail', { job });
   };
 
   const handleFavoritePress = (job: Job, event: any) => {

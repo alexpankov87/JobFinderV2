@@ -2,11 +2,12 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
-import { HomeStackParamList } from '../navigation/HomeStack';
+import { RootStackParamList } from '../types/navigation';
 import { useState } from 'react';
 import ApplyModal from '../components/ApplyModal';
 
-type JobDetailScreenProps = StackScreenProps<HomeStackParamList, 'JobDetail'>;
+
+type JobDetailScreenProps = StackScreenProps<RootStackParamList, 'JobDetail'>;
 
 export default function JobDetailScreen({ route }: JobDetailScreenProps) {
   const { job } = route.params;

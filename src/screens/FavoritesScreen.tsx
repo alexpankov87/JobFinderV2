@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useFavorites } from '../context/FavoritesContext';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
-import { RootStackParamList, FavoritesStackParamList } from '../types/navigation';
+import { RootStackParamList } from '../types/navigation';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -13,13 +13,7 @@ export default function FavoritesScreen() {
   const { favorites, loading, removeFromFavorites, refetch } = useFavorites();
 
   const handleJobPress = (job: Job) => {
-    navigation.navigate('MainTabs', {
-      screen: 'Favorites',
-      params: {
-        screen: 'JobDetail',
-        params: { job }
-      }
-    });
+    navigation.navigate('JobDetail', { job });
   };
 
   const renderJobCard = ({ item }: { item: Job }) => (
