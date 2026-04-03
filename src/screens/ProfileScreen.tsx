@@ -1,13 +1,19 @@
 import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { useProfile } from '../hooks/useProfile';
 import { AppStyles, Colors } from '../styles/AppStyles';
-import { User, Edit, LogOut, Mail, Phone, MessageCircle, Send } from 'lucide-react-native';
+import { User, Edit, LogOut, Mail, Phone, MessageCircle, Send, FileText, Plus } from 'lucide-react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ProfileStackParamList } from '../types/navigation';
 
-export default function ProfileScreen({ navigation }: any) {
+type ProfileScreenNavigationProp = StackNavigationProp<ProfileStackParamList>;
+
+export default function ProfileScreen() {
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
   const { user, signOut } = useAuth();
-  const { profile, isLoading, refetch } = useProfile();
-
+  const { profile, isLoading } = useProfile();
+  
   const handleSignOut = async () => {
     Alert.alert(
       'Выход',
@@ -59,10 +65,10 @@ export default function ProfileScreen({ navigation }: any) {
         <Text style={AppStyles.logoText}>Профиль</Text>
       </View>
 
+      {/* Личная информация */}
       <View style={[AppStyles.jobCard, { marginTop: 20 }]}>
         <Text style={[AppStyles.jobTitle, { marginBottom: 16 }]}>Личная информация</Text>
         
-        {/* Email */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
           <Mail size={18} color={Colors.secondary} />
           <View style={{ flex: 1 }}>
@@ -71,7 +77,6 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
         </View>
 
-        {/* Имя */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
           <User size={18} color={Colors.secondary} />
           <View style={{ flex: 1 }}>
@@ -80,7 +85,6 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
         </View>
 
-        {/* Телефон */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
           <Phone size={18} color={Colors.secondary} />
           <View style={{ flex: 1 }}>
@@ -89,7 +93,6 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
         </View>
 
-        {/* Способ связи */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
           {getContactIcon(profile?.preferred_contact || null)}
           <View style={{ flex: 1 }}>
@@ -102,8 +105,32 @@ export default function ProfileScreen({ navigation }: any) {
           style={[AppStyles.applyButton, { marginTop: 8, flexDirection: 'row', gap: 8, justifyContent: 'center' }]}
           onPress={() => navigation.navigate('EditProfile')}
         >
-          <Edit size={16} color={Colors.white} />
+          <Edit size={20} color={Colors.white} />
           <Text style={AppStyles.applyButtonText}>Редактировать профиль</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Резюме */}
+      <View style={[AppStyles.jobCard, { marginTop: 16 }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <FileText size={20} color={Colors.primary} />
+            <Text style={AppStyles.jobTitle}>Мои резюме</Text>
+          </View>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('MyResumes')}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
+          >
+            <Plus size={18} color={Colors.primary} />
+            <Text style={{ color: Colors.primary, fontSize: 12 }}>Добавить</Text>
+          </TouchableOpacity>
+        </View>
+        
+        <TouchableOpacity
+          style={[AppStyles.applyButton, { backgroundColor: Colors.lightGray, marginTop: 0 }]}
+          onPress={() => navigation.navigate('MyResumes')}
+        >
+          <Text style={{ color: Colors.primary }}>Управление резюме →</Text>
         </TouchableOpacity>
       </View>
 

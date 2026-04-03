@@ -1,13 +1,21 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { Job } from './index';
-import { ProfileStackParamList } from '../navigation/ProfileStack';
-// Типы для стека авторизации
+
+// Auth Stack
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
 };
 
-// Типы для главных вкладок (без вложенных стеков)
+// Profile Stack
+export type ProfileStackParamList = {
+  ProfileMain: undefined;
+  EditProfile: undefined;
+  MyResumes: undefined;
+  ResumeForm: { resumeId?: number } | undefined;
+};
+
+// Main Tabs
 export type MainTabsParamList = {
   Home: undefined;
   Favorites: undefined;
@@ -15,7 +23,7 @@ export type MainTabsParamList = {
   Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
 
-// Корневой стек — только Auth, MainTabs и JobDetail (доступен отовсюду)
+// Root Stack
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   MainTabs: NavigatorScreenParams<MainTabsParamList>;

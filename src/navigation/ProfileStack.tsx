@@ -1,11 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
-
-export type ProfileStackParamList = {
-  ProfileMain: undefined;
-  EditProfile: undefined;
-};
+import MyResumesScreen from '../screens/MyResumesScreen';
+import ResumeFormScreen from '../screens/ResumeFormScreen';
+import { ProfileStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<ProfileStackParamList>();
 
@@ -27,6 +25,16 @@ export default function ProfileStack() {
         name="EditProfile" 
         component={EditProfileScreen} 
         options={{ title: 'Редактирование' }}
+      />
+      <Stack.Screen 
+        name="MyResumes" 
+        component={MyResumesScreen} 
+        options={{ title: 'Мои резюме' }}
+      />
+      <Stack.Screen 
+        name="ResumeForm" 
+        component={ResumeFormScreen} 
+        options={{ title: 'Резюме' }}
       />
     </Stack.Navigator>
   );

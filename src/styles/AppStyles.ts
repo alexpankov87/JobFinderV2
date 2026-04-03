@@ -444,4 +444,10 @@ export const AppStyles = StyleSheet.create({
   contactMethodTextSmallActive: {
     color: Colors.white,
   },
+  label: {
+    marginBottom: 4,
+    color: Colors.darkGray,
+    fontSize: 14,
+    fontWeight: '500',
+  },
 }); 
