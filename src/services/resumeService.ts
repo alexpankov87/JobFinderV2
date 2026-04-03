@@ -1,24 +1,10 @@
 import { supabase } from './supabase';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { Resume, WorkExperience } from '../types';
 
+// НИКАКИХ ЛОКАЛЬНЫХ ОБЪЯВЛЕНИЙ ТИПОВ!
 
-export interface Resume {
-  id: number;
-  user_id: string;
-  title: string;
-  position: string;
-  experience: string | null;
-  education: string | null;
-  skills: string[];
-  languages: string[];
-  file_url: string | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-// Загрузка всех резюме пользователя
 export async function getUserResumes(userId: string): Promise<Resume[]> {
   const { data, error } = await supabase
     .from('resumes')
@@ -30,19 +16,21 @@ export async function getUserResumes(userId: string): Promise<Resume[]> {
   return data || [];
 }
 
-// Создание резюме (без файла)
-export async function createResume(resume: Omit<Resume, 'id' | 'created_at' | 'updated_at'>) {
+export async function createResume(
+  resume: Omit<Resume, 'id' | 'created_at' | 'updated_at' | 'file_url'>
+) {
   const { data, error } = await supabase
     .from('resumes')
-    .insert(resume)
+    .insert({
+      ...resume,
+      file_url: null,
+    })
     .select()
     .single();
 
   if (error) throw error;
   return data;
 }
-
-// Обновление резюме
 export async function updateResume(id: number, updates: Partial<Resume>) {
   const { data, error } = await supabase
     .from('resumes')
@@ -55,7 +43,6 @@ export async function updateResume(id: number, updates: Partial<Resume>) {
   return data;
 }
 
-// Удаление резюме
 export async function deleteResume(id: number) {
   const { error } = await supabase
     .from('resumes')
@@ -65,15 +52,12 @@ export async function deleteResume(id: number) {
   if (error) throw error;
 }
 
-// Выбор активного резюме (снимает активность с остальных)
 export async function setActiveResume(userId: string, resumeId: number) {
-  // Сначала снимаем активность со всех резюме пользователя
   await supabase
     .from('resumes')
     .update({ is_active: false })
     .eq('user_id', userId);
 
-  // Затем активируем выбранное
   const { data, error } = await supabase
     .from('resumes')
     .update({ is_active: true })
@@ -85,7 +69,6 @@ export async function setActiveResume(userId: string, resumeId: number) {
   return data;
 }
 
-// Загрузка PDF файла
 export async function uploadResumeFile(userId: string, resumeId: number): Promise<string | null> {
   try {
     const result = await DocumentPicker.getDocumentAsync({
@@ -100,20 +83,17 @@ export async function uploadResumeFile(userId: string, resumeId: number): Promis
     const fileName = `${userId}/${resumeId}.${fileExt}`;
     const fileUri = file.uri;
 
-    // Читаем файл как Base64 (исправлено)
     const fileContent = await FileSystem.readAsStringAsync(fileUri, {
-      encoding: 'base64',  // ← строка, не EncodingType.Base64
+      encoding: 'base64',
     });
 
-    // Конвертируем Base64 в Uint8Array
     const binaryString = atob(fileContent);
     const bytes = new Uint8Array(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) {
       bytes[i] = binaryString.charCodeAt(i);
     }
 
-    // Загружаем в Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('resumes')
       .upload(fileName, bytes, {
         contentType: 'application/pdf',
@@ -131,14 +111,4 @@ export async function uploadResumeFile(userId: string, resumeId: number): Promis
     console.error('Ошибка загрузки файла:', error);
     return null;
   }
-}
-
-// Вспомогательная функция для декодирования Base64
-function decode(base64: string): Uint8Array {
-  const binaryString = atob(base64);
-  const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
 }

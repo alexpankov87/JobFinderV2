@@ -1,3 +1,4 @@
+// ============ Job ============
 export interface Job {
   id: number;
   title: string;
@@ -13,6 +14,7 @@ export interface Job {
   url?: string;
 }
 
+// ============ Response ============
 export interface Response {
   id: number;
   job_id: number;
@@ -29,4 +31,51 @@ export interface Response {
 
 export interface ResponseWithJob extends Response {
   jobs: Job;
+}
+
+// ============ WorkExperience ============
+export interface WorkExperience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;      // ISO формат: YYYY-MM-DD
+  endDate: string | null; // ISO формат: YYYY-MM-DD
+  isCurrent: boolean;
+  description: string;
+}
+
+// ============ Resume ============
+export interface Resume {
+  id: number;
+  user_id: string;
+  title: string;
+  position: string;
+  experience?: string | null;
+  work_experiences?: WorkExperience[];
+  education: string | null;
+  skills: string[];
+  languages: string[];
+  file_url: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// ============ Profile ============
+export interface Profile {
+  id: string;
+  email: string;
+  full_name: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  preferred_contact: 'email' | 'whatsapp' | 'telegram' | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// ============ Language ============
+export interface LanguageItem {
+  id: string;
+  name: string;
+  level: string;
 }

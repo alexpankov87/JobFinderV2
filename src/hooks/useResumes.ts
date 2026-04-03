@@ -1,6 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUserResumes, createResume, updateResume, deleteResume, setActiveResume, uploadResumeFile, Resume } from '../services/resumeService';
+import { getUserResumes, createResume, updateResume, deleteResume, setActiveResume, uploadResumeFile } from '../services/resumeService';
+import { Resume } from '../types'; // ← импорт из types, не из resumeService
 import { useAuth } from '../context/AuthContext';
+
+type CreateResumeData = Omit<Resume, 'id' | 'created_at' | 'updated_at' | 'user_id' | 'file_url'>;
 
 export function useResumes() {
   const { user } = useAuth();
@@ -18,9 +21,13 @@ export function useResumes() {
     staleTime: 1000 * 60,
   });
 
+    
   const { mutate: addResume, isPending: isAdding } = useMutation({
-    mutationFn: (resume: Omit<Resume, 'id' | 'created_at' | 'updated_at' | 'user_id' | 'file_url'>) => {
-      return createResume({ ...resume, user_id: user!.id, file_url: null });
+    mutationFn: (resumeData: CreateResumeData) => {
+      return createResume({
+        ...resumeData,
+        user_id: user!.id,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['resumes'] });
@@ -28,7 +35,7 @@ export function useResumes() {
   });
 
   const { mutate: editResume, isPending: isEditing } = useMutation({
-    mutationFn: ({ id, updates }: { id: number; updates: Partial<Omit<Resume, 'id' | 'created_at' | 'updated_at' | 'user_id'>> }) => {
+    mutationFn: ({ id, updates }: { id: number; updates: Partial<Resume> }) => {
       return updateResume(id, updates);
     },
     onSuccess: () => {
