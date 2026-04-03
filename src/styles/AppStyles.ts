@@ -340,4 +340,18 @@ export const AppStyles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 16,
   },
+    // Стили для кнопок выбора способа связи (добавь, если отсутствуют)
+  contactMethodButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+  },
+  contactMethodButtonActive: {
+    backgroundColor: Colors.primary,
+  },
+  contactMethodTextActive: {
+    color: Colors.white,
+  },
 });

@@ -14,6 +14,14 @@ Notifications.setNotificationHandler({
   }),
 });
 
+export type MainTabsParamList = {
+  Home: undefined;
+  Favorites: undefined;
+  MyResponses: undefined;
+  Profile: undefined;
+  EditProfile: undefined;
+};
+
 // Запрос разрешения и получение токена
 export async function registerForPushNotificationsAsync(userId: string) {
   if (!Device.isDevice) {
