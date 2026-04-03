@@ -1,12 +1,57 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../services/supabase';
 import { Job } from '../types';
+import { useFiltersStore } from '../store/filtersStore';
 
-const fetchJobs = async (): Promise<Job[]> => {
-  const { data, error } = await supabase
+interface Filters {
+  searchQuery: string;
+  country: string | null;
+  minSalary: number | null;
+  maxSalary: number | null;
+  currency: string | null;
+  salaryPeriod: string | null;
+}
+
+const fetchJobs = async (filters: Filters): Promise<Job[]> => {
+  let query = supabase
     .from('jobs')
     .select('*')
     .order('posted_at', { ascending: false });
+
+  // Поиск по названию и компании
+  if (filters.searchQuery) {
+    query = query.or(
+      `title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`
+    );
+  }
+
+  // Фильтр по стране
+  if (filters.country) {
+    query = query.eq('country', filters.country);
+  }
+
+  // Фильтр по минимальной зарплате
+  if (filters.minSalary) {
+    query = query.gte('salary_min', filters.minSalary);
+  }
+
+  // Фильтр по максимальной зарплате
+  if (filters.maxSalary) {
+    query = query.lte('salary_max', filters.maxSalary);
+  }
+
+  // Фильтр по валюте
+  if (filters.currency) {
+    query = query.eq('currency', filters.currency);
+  }
+
+  // TODO: Фильтр по периоду зарплаты (salaryPeriod)
+  // Пока просто логируем, позже добавим логику преобразования
+  if (filters.salaryPeriod && filters.salaryPeriod !== 'year') {
+    console.log('Salary period filter active:', filters.salaryPeriod);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw new Error(error.message);
 
@@ -27,14 +72,16 @@ const fetchJobs = async (): Promise<Job[]> => {
 };
 
 export function useJobs() {
+  const { filters } = useFiltersStore();
+  
   const {
     data: jobs = [],
     isLoading,
     error,
     refetch,
   } = useQuery({
-    queryKey: ['jobs'],
-    queryFn: fetchJobs,
+    queryKey: ['jobs', filters],
+    queryFn: () => fetchJobs(filters),
     staleTime: 1000 * 60 * 5, // 5 минут
   });
 

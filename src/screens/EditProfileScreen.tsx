@@ -1,6 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, Phone, User, MessageCircle, Send } from 'lucide-react-native';
 import { useProfile } from '../hooks/useProfile';
 import { profileSchema, ProfileFormData } from '../schemas/profileSchema';
 import { AppStyles, Colors } from '../styles/AppStyles';
@@ -37,6 +38,11 @@ export default function EditProfileScreen({ navigation }: any) {
     <ScrollView style={AppStyles.container}>
       <Text style={[AppStyles.title, { marginBottom: 20 }]}>Редактирование профиля</Text>
 
+      {/* Имя */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 8 }}>
+        <User size={18} color={Colors.darkGray} />
+        <Text style={{ color: Colors.darkGray }}>Имя</Text>
+      </View>
       <Controller
         control={control}
         name="full_name"
@@ -55,6 +61,11 @@ export default function EditProfileScreen({ navigation }: any) {
         )}
       />
 
+      {/* Телефон */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 8 }}>
+        <Phone size={18} color={Colors.darkGray} />
+        <Text style={{ color: Colors.darkGray }}>Телефон</Text>
+      </View>
       <Controller
         control={control}
         name="phone"
@@ -74,34 +85,42 @@ export default function EditProfileScreen({ navigation }: any) {
         )}
       />
 
-      <Text style={{ marginBottom: 8, color: Colors.darkGray }}>Предпочтительный способ связи</Text>
-      <Controller
-        control={control}
-        name="preferred_contact"
-        render={({ field: { onChange, value } }) => (
-          <View style={AppStyles.contactMethodContainer}>
-            {(['email', 'whatsapp', 'telegram'] as const).map((method) => (
-              <TouchableOpacity
-                key={method}
+    {/* Способ связи */}
+    <Text style={{ marginBottom: 12, color: Colors.darkGray, fontWeight: '500' }}>
+      Предпочтительный способ связи
+    </Text>
+    <Controller
+      control={control}
+      name="preferred_contact"
+      render={({ field: { onChange, value } }) => (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {(['email', 'whatsapp', 'telegram'] as const).map((method) => (
+            <TouchableOpacity
+              key={method}
+              style={[
+                AppStyles.contactMethodButtonSmall,
+                value === method && AppStyles.contactMethodButtonSmallActive,
+              ]}
+              onPress={() => onChange(method)}
+            >
+              {method === 'email' && <Mail size={14} color={value === method ? Colors.white : Colors.primary} />}
+              {method === 'whatsapp' && <MessageCircle size={14} color={value === method ? Colors.white : Colors.primary} />}
+              {method === 'telegram' && <Send size={14} color={value === method ? Colors.white : Colors.primary} />}
+              <Text
                 style={[
-                  AppStyles.contactMethodButton,
-                  value === method && AppStyles.contactMethodButtonActive,
+                  AppStyles.contactMethodTextSmall,
+                  value === method && AppStyles.contactMethodTextSmallActive,
                 ]}
-                onPress={() => onChange(method)}
               >
-                <Text style={[
-                  AppStyles.contactMethodText,
-                  value === method && AppStyles.contactMethodTextActive,
-                ]}>
-                  {method === 'email' && '📧 Email'}
-                  {method === 'whatsapp' && '💬 WhatsApp'}
-                  {method === 'telegram' && '✈️ Telegram'}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-      />
+                {method === 'email' && 'Email'}
+                {method === 'whatsapp' && 'WhatsApp'}
+                {method === 'telegram' && 'Telegram'}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+    />
 
       <TouchableOpacity
         style={[AppStyles.applyButton, { marginTop: 20 }]}

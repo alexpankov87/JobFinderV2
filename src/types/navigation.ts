@@ -20,4 +20,5 @@ export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   MainTabs: NavigatorScreenParams<MainTabsParamList>;
   JobDetail: { job: Job };
+  Filter: undefined;
 };

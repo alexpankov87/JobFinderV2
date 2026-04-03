@@ -7,6 +7,7 @@ import AuthStack from './src/navigation/AuthStack';
 import MainTabs from './src/navigation/MainTabs';
 import JobDetailScreen from './src/screens/JobDetailScreen';
 import { RootStackParamList } from './src/types/navigation';
+import FilterScreen from './src/screens/FilterScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -34,8 +35,19 @@ function RootNavigator() {
               headerTintColor: '#fff',
               headerBackTitle: 'Назад',
             }}
-          />
+            />
+            <Stack.Screen 
+              name="Filter" 
+              component={FilterScreen} 
+              options={{ 
+                headerShown: true,
+                title: 'Фильтры',
+                headerStyle: { backgroundColor: '#0077cc' },
+                headerTintColor: '#fff',
+              }}
+            />
         </>
+        
       )}
     </Stack.Navigator>
   );

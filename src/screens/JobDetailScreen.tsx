@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
+import { MapPin, DollarSign, FileText, CheckCircle } from 'lucide-react-native';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { RootStackParamList } from '../types/navigation';
 import { supabase } from '../services/supabase';
@@ -16,7 +17,6 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
   const [hasApplied, setHasApplied] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Проверяем, откликался ли пользователь на эту вакансию
   useEffect(() => {
     const checkIfApplied = async () => {
       if (!user) {
@@ -62,28 +62,43 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
       <ScrollView style={AppStyles.detailContainer}>
         <Text style={AppStyles.detailTitle}>{job.title}</Text>
         <Text style={AppStyles.detailCompany}>{job.company}</Text>
-        <Text style={AppStyles.detailLocation}>
-          📍 {job.location}, {job.country}
-        </Text>
         
+        {/* Локация — выровнено по центру с иконкой */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+          <MapPin size={16} color={Colors.secondary} style={{ marginRight: 6 }} />
+          <Text style={AppStyles.detailLocation}>{job.location}, {job.country}</Text>
+        </View>
+        
+        {/* Зарплата — выровнено по центру с иконкой */}
         <View style={AppStyles.detailSalary}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: Colors.primary }}>
-            💰 Зарплата: {formatSalary()}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <DollarSign size={18} color={Colors.primary} style={{ marginRight: 8 }} />
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: Colors.primary }}>
+              Зарплата: {formatSalary()}
+            </Text>
+          </View>
         </View>
 
-        <Text style={AppStyles.sectionTitle}>Описание</Text>
+        {/* Описание */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 8 }}>
+          <FileText size={20} color={Colors.darkGray} style={{ marginRight: 8 }} />
+          <Text style={AppStyles.sectionTitle}>Описание</Text>
+        </View>
         <Text style={AppStyles.detailDescription}>
           {job.description || 'Описание отсутствует.'}
         </Text>
 
+        {/* Требования — без иконок, просто текст */}
         {job.requirements && job.requirements.length > 0 && (
           <>
-            <Text style={AppStyles.sectionTitle}>Требования</Text>
+            <Text style={[AppStyles.sectionTitle, { marginTop: 16, marginBottom: 12 }]}>
+              Требования
+            </Text>
             {job.requirements.map((req: string, index: number) => (
-              <Text key={index} style={AppStyles.detailRequirements}>
-                • {req}
-              </Text>
+              <View key={index} style={{ flexDirection: 'row', marginBottom: 8 }}>
+                <Text style={{ color: Colors.primary, marginRight: 8 }}>•</Text>
+                <Text style={AppStyles.detailRequirements}>{req}</Text>
+              </View>
             ))}
           </>
         )}
@@ -93,9 +108,14 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
           onPress={handleApply}
           disabled={hasApplied || loading}
         >
-          <Text style={AppStyles.applyButtonText}>
-            {loading ? 'Проверка...' : hasApplied ? '✓ Вы уже откликнулись' : '📩 Откликнуться'}
-          </Text>
+          {hasApplied ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <CheckCircle size={20} color={Colors.white} style={{ marginRight: 8 }} />
+              <Text style={AppStyles.applyButtonText}>Вы уже откликнулись</Text>
+            </View>
+          ) : (
+            <Text style={AppStyles.applyButtonText}>📩 Откликнуться</Text>
+          )}
         </TouchableOpacity>
       </ScrollView>
 

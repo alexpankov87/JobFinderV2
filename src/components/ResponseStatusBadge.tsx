@@ -1,21 +1,21 @@
 import { View, Text } from 'react-native';
+import { getStatusConfig, ResponseStatus } from '../constants/statusConfig';
 import { AppStyles } from '../styles/AppStyles';
 
-type Status = 'pending' | 'viewed' | 'accepted' | 'rejected';
+interface Props {
+  status: ResponseStatus;
+}
 
-const statusConfig = {
-  pending: { label: 'На рассмотрении', style: AppStyles.statusPending, textStyle: AppStyles.statusTextPending },
-  viewed: { label: 'Просмотрено', style: AppStyles.statusViewed, textStyle: AppStyles.statusTextViewed },
-  accepted: { label: 'Приглашение', style: AppStyles.statusAccepted, textStyle: AppStyles.statusTextAccepted },
-  rejected: { label: 'Отказ', style: AppStyles.statusRejected, textStyle: AppStyles.statusTextRejected },
-};
+export default function ResponseStatusBadge({ status }: Props) {
+  const config = getStatusConfig(status);
+  const StatusIcon = config.icon;
 
-export default function ResponseStatusBadge({ status }: { status: Status }) {
-  const config = statusConfig[status];
-  
   return (
-    <View style={[AppStyles.statusBadge, config.style]}>
-      <Text style={[AppStyles.statusText, config.textStyle]}>{config.label}</Text>
+    <View style={[AppStyles.statusBadge, { backgroundColor: config.bgColor, flexDirection: 'row', alignItems: 'center', gap: 6 }]}>
+      <StatusIcon size={12} color={config.color} />
+      <Text style={[AppStyles.statusText, { color: config.color }]}>
+        {config.label}
+      </Text>
     </View>
   );
 }

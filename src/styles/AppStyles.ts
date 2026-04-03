@@ -2,13 +2,14 @@ import { StyleSheet } from 'react-native';
 
 // 🎨 Цветовая схема (константы)
 export const Colors = {
-  primary: '#0077cc',
+  primary: '#2092e4',
   secondary: '#666',
   background: '#f0f0f0',
   white: '#ffffff',
   gray: 'gray',
   lightGray: '#e0e0e0',
   darkGray: '#333',
+  transParent: 'transparent',
 };
 
 // 🌑 Тени (переиспользуемые)
@@ -129,7 +130,7 @@ export const AppStyles = StyleSheet.create({
   },
   applyButton: {
     backgroundColor: Colors.primary,
-    padding: 16,
+    padding: 10,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 20,
@@ -137,7 +138,7 @@ export const AppStyles = StyleSheet.create({
   },
   applyButtonText: {
     color: Colors.white,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   // Стили для модального окна отклика
@@ -354,4 +355,93 @@ export const AppStyles = StyleSheet.create({
   contactMethodTextActive: {
     color: Colors.white,
   },
-});
+  searchBar: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: Colors.white,
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+  borderRadius: 30,
+  marginBottom: 16,
+  ...Shadows.small,
+},
+  activeFilterBadge: {
+    backgroundColor: Colors.primary,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    },
+  counterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    gap: 8,
+  },
+  counterText: {
+    color: Colors.secondary,
+    fontSize: 14,
+  },
+  currencyButton: {
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: Colors.primary,
+  backgroundColor: Colors.white,
+  },
+  currencyButtonActive: {
+    backgroundColor: Colors.primary,
+  },
+  currencyIcon: {
+    marginRight: 4,
+  },
+  currencyText: {
+    fontSize: 12,
+    color: Colors.primary,
+  },
+  currencyTextActive: {
+    color: Colors.white,
+  },
+  countryButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    backgroundColor: Colors.white,
+  },
+  countryButtonActive: {
+    backgroundColor: Colors.primary,
+  },
+  countryText: {
+    fontSize: 12,
+    color: Colors.primary,
+  },
+  countryTextActive: {
+    color: Colors.white,
+  },
+  contactMethodButtonSmall: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: Colors.primary,
+  backgroundColor: Colors.white,
+  gap: 6,
+},
+  contactMethodButtonSmallActive: {
+    backgroundColor: Colors.primary,
+  },
+  contactMethodTextSmall: {
+    fontSize: 12,
+    color: Colors.primary,
+  },
+  contactMethodTextSmallActive: {
+    color: Colors.white,
+  },
+}); 
