@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Session, User } from '@supabase/supabase-js';
 import * as Linking from 'expo-linking';
 import { supabase } from '../services/supabase';
+import { registerForPushNotificationsAsync, unregisterPushToken } from '../services/notifications';
 
 type AuthContextType = {
   user: User | null;
@@ -24,10 +25,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!url) return;
     
     console.log('🔗 Deep link received:', url);
-    
-    // Supabase возвращает токен в формате:
-    // exp://localhost:19000/--#access_token=xxx&refresh_token=xxx&...
-    // или jobfinder://auth/callback#access_token=xxx&...
     
     if (url.includes('#access_token')) {
       const hashParams = new URLSearchParams(url.split('#')[1]);
@@ -62,10 +59,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // 2. Слушаем изменения авторизации
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        // ✅ Регистрируем push-уведомления при входе
+        if (session?.user) {
+          await registerForPushNotificationsAsync(session.user.id);
+        }
       }
     );
 
@@ -91,7 +93,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string) => {
-    // Получаем URL для редиректа после подтверждения
     const redirectTo = Linking.createURL('auth/callback');
     console.log('📧 Sign up with redirect to:', redirectTo);
     
@@ -107,6 +108,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    // ✅ Удаляем все push-токены пользователя при выходе
+    if (user) {
+      const { data: tokens } = await supabase
+        .from('push_tokens')
+        .select('token')
+        .eq('user_id', user.id);
+      
+      if (tokens && tokens.length > 0) {
+        for (const { token } of tokens) {
+          await unregisterPushToken(user.id, token);
+        }
+      }
+    }
+    
     await supabase.auth.signOut();
   };
 

@@ -1,0 +1,16 @@
+{
+    "deno.enable": true,
+    "deno.unstable": true,
+    "deno.enablePaths": [
+        "./supabase/functions"
+    ],
+    "deno.importMap": "./deno.json",
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "deno.json"
+            ],
+            "url": "https://deno.land/x/deno/cli/schemas/lint-rules.v1.json"
+        }
+    ]
+}
