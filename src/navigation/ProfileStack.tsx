@@ -3,7 +3,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 
 export type ProfileStackParamList = {
-  Profile: undefined;
+  ProfileMain: undefined;
   EditProfile: undefined;
 };
 
@@ -19,7 +19,7 @@ export default function ProfileStack() {
       }}
     >
       <Stack.Screen 
-        name="Profile" 
+        name="ProfileMain" 
         component={ProfileScreen} 
         options={{ title: 'Профиль', headerShown: false }}
       />
