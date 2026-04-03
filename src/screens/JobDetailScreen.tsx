@@ -1,17 +1,44 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { AppStyles, Colors } from '../styles/AppStyles';
-import { Job } from '../types';
+import { useState, useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
+import { AppStyles, Colors } from '../styles/AppStyles';
 import { RootStackParamList } from '../types/navigation';
-import { useState } from 'react';
+import { supabase } from '../services/supabase';
+import { useAuth } from '../context/AuthContext';
 import ApplyModal from '../components/ApplyModal';
-
 
 type JobDetailScreenProps = StackScreenProps<RootStackParamList, 'JobDetail'>;
 
 export default function JobDetailScreen({ route }: JobDetailScreenProps) {
   const { job } = route.params;
+  const { user } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Проверяем, откликался ли пользователь на эту вакансию
+  useEffect(() => {
+    const checkIfApplied = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('responses')
+        .select('id')
+        .eq('job_id', job.id)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!error && data) {
+        setHasApplied(true);
+      }
+      setLoading(false);
+    };
+
+    checkIfApplied();
+  }, [job.id, user]);
 
   const formatSalary = () => {
     if (job.salary_min && job.salary_max) {
@@ -53,7 +80,7 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
         {job.requirements && job.requirements.length > 0 && (
           <>
             <Text style={AppStyles.sectionTitle}>Требования</Text>
-            {job.requirements.map((req, index) => (
+            {job.requirements.map((req: string, index: number) => (
               <Text key={index} style={AppStyles.detailRequirements}>
                 • {req}
               </Text>
@@ -61,8 +88,14 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
           </>
         )}
 
-        <TouchableOpacity style={AppStyles.applyButton} onPress={handleApply}>
-          <Text style={AppStyles.applyButtonText}>📩 Откликнуться</Text>
+        <TouchableOpacity
+          style={[AppStyles.applyButton, hasApplied && { backgroundColor: Colors.gray }]}
+          onPress={handleApply}
+          disabled={hasApplied || loading}
+        >
+          <Text style={AppStyles.applyButtonText}>
+            {loading ? 'Проверка...' : hasApplied ? '✓ Вы уже откликнулись' : '📩 Откликнуться'}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -70,7 +103,10 @@ export default function JobDetailScreen({ route }: JobDetailScreenProps) {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         job={job}
-        onSuccess={() => setModalVisible(false)}
+        onSuccess={() => {
+          setModalVisible(false);
+          setHasApplied(true);
+        }}
       />
     </>
   );

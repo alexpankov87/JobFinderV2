@@ -16,7 +16,7 @@ export interface Job {
 export interface Response {
   id: number;
   job_id: number;
-  user_id?: string;
+  user_id: string;
   full_name: string;
   email: string;
   phone?: string;
@@ -25,4 +25,8 @@ export interface Response {
   cover_letter?: string;
   status: 'pending' | 'viewed' | 'accepted' | 'rejected';
   created_at: string;
+}
+
+export interface ResponseWithJob extends Response {
+  jobs: Job;
 }

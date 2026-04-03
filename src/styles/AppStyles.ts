@@ -269,4 +269,75 @@ export const AppStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.primary,
   },
+    // Стили для карточки отклика
+  responseCard: {
+    backgroundColor: Colors.white,
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 10,
+    ...Shadows.small,
+  },
+  responseTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.darkGray,
+    marginBottom: 4,
+  },
+  responseCompany: {
+    fontSize: 14,
+    color: Colors.secondary,
+    marginBottom: 8,
+  },
+  responseMeta: {
+    fontSize: 12,
+    color: Colors.secondary,
+    marginBottom: 4,
+  },
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+    marginTop: 8,
+  },
+  statusPending: {
+    backgroundColor: '#fef3c7',
+  },
+  statusViewed: {
+    backgroundColor: '#dbeafe',
+  },
+  statusAccepted: {
+    backgroundColor: '#d1fae5',
+  },
+  statusRejected: {
+    backgroundColor: '#fee2e2',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  statusTextPending: {
+    color: '#d97706',
+  },
+  statusTextViewed: {
+    color: '#2563eb',
+  },
+  statusTextAccepted: {
+    color: '#059669',
+  },
+  statusTextRejected: {
+    color: '#dc2626',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 50,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: Colors.secondary,
+    textAlign: 'center',
+    marginTop: 16,
+  },
 });

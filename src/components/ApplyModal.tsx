@@ -15,6 +15,7 @@ import { AppStyles, Colors } from '../styles/AppStyles';
 import { supabase } from '../services/supabase';
 import { Job } from '../types';
 import { ResponseFormData, responseSchema } from '../schemas/responseSchema';
+import { useAuth } from '../context/AuthContext';
 
 type ApplyModalProps = {
   visible: boolean;
@@ -25,7 +26,7 @@ type ApplyModalProps = {
 
 export default function ApplyModal({ visible, onClose, job, onSuccess }: ApplyModalProps) {
   const [loading, setLoading] = useState(false);
-
+  const { user } = useAuth();
   const {
     control,
     handleSubmit,
@@ -66,6 +67,7 @@ export default function ApplyModal({ visible, onClose, job, onSuccess }: ApplyMo
     try {
       const { error } = await supabase.from('responses').insert({
         job_id: job.id,
+        user_id: user?.id,
         full_name: data.fullName,
         email: data.email,
         phone: data.phone || null,

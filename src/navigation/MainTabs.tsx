@@ -3,8 +3,10 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import MyResponsesScreen from '../screens/MyResponsesScreen';
 import { Colors, AppStyles } from '../styles/AppStyles';
 import { MainTabsParamList } from '../types/navigation';
+
 
 const Tab = createBottomTabNavigator<MainTabsParamList>();
 
@@ -31,6 +33,7 @@ export default function MainTabs() {
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Главная' }} />
       <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ title: 'Избранное' }} />
+      <Tab.Screen name="MyResponses" component={MyResponsesScreen} options={{ title: 'Отклики' }} />
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Профиль' }} />
     </Tab.Navigator>
   );
