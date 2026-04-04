@@ -1,146 +1,86 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, ScrollView, ActivityIndicator, Text } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useProfile } from '../hooks/useProfile';
+import { useResumes } from '../hooks/useResumes';
+import { useResponses } from '../hooks/useResponses';
 import { AppStyles, Colors } from '../styles/AppStyles';
-import { User, Edit, LogOut, Mail, Phone, MessageCircle, Send, FileText, Plus } from 'lucide-react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { ProfileStackParamList } from '../types/navigation';
+import ProfileHeader from '../components/ProfileHeader';
+import ProfileInfo from '../components/ProfileInfo';
+import ActiveResumeCard from '../components/ActiveResumeCard';
+import StatsCard from '../components/StatsCard';
+import ResumesSection from '../components/ResumesSection';
+import ResponseStatusList from '../components/ResponseStatusList';
 
 type ProfileScreenNavigationProp = StackNavigationProp<ProfileStackParamList>;
 
 export default function ProfileScreen() {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const { user, signOut } = useAuth();
-  const { profile, isLoading } = useProfile();
-  
+  const { profile, isLoading: profileLoading } = useProfile();
+  const { resumes, isLoading: resumesLoading, refetch: refetchResumes } = useResumes();
+  const { responses, refetch: refetchResponses } = useResponses();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchResumes();
+      refetchResponses();
+    }, [refetchResumes, refetchResponses])
+  );
+
+  const activeResume = resumes.find(r => r.is_active);
+  const totalResponses = responses.length;
+  const acceptedResponses = responses.filter(r => r.status === 'accepted').length;
+  const totalViews = resumes.reduce((sum, r) => sum + (r.views || 0), 0);
+  const pendingResponses = responses.filter(r => r.status === 'pending').length;
+  const viewedResponses = responses.filter(r => r.status === 'viewed').length;
+  const rejectedResponses = responses.filter(r => r.status === 'rejected').length;
+
   const handleSignOut = async () => {
-    Alert.alert(
-      'Выход',
-      'Вы уверены, что хотите выйти?',
-      [
-        { text: 'Отмена', style: 'cancel' },
-        {
-          text: 'Выйти',
-          style: 'destructive',
-          onPress: async () => {
-            await signOut();
-          },
-        },
-      ]
-    );
+    await signOut();
   };
 
-  const getContactIcon = (contact: string | null) => {
-    switch (contact) {
-      case 'email': return <Mail size={16} color={Colors.primary} />;
-      case 'whatsapp': return <MessageCircle size={16} color={Colors.primary} />;
-      case 'telegram': return <Send size={16} color={Colors.primary} />;
-      default: return null;
-    }
-  };
-
-  const getContactLabel = (contact: string | null) => {
-    switch (contact) {
-      case 'email': return 'Email';
-      case 'whatsapp': return 'WhatsApp';
-      case 'telegram': return 'Telegram';
-      default: return 'Не выбран';
-    }
-  };
-
-  if (isLoading) {
+  if (profileLoading || resumesLoading) {
     return (
       <View style={[AppStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
         <ActivityIndicator size="large" color={Colors.primary} />
-        <Text style={{ marginTop: 20, color: Colors.secondary }}>Загрузка профиля...</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView style={AppStyles.container}>
-      <View style={AppStyles.header}>
-        <User size={32} color={Colors.primary} />
-        <Text style={AppStyles.logoText}>Профиль</Text>
+    <ScrollView 
+      style={AppStyles.container}
+      contentContainerStyle={{ paddingBottom: 40 }}
+      showsVerticalScrollIndicator={true}
+    >
+      <ProfileHeader onSignOut={handleSignOut} />
+
+      <ProfileInfo profile={profile ?? null} email={user?.email} onEdit={() => navigation.navigate('EditProfile')} />
+
+      {activeResume && <ActiveResumeCard resume={activeResume} />}
+
+      <StatsCard totalResponses={totalResponses} acceptedResponses={acceptedResponses} totalViews={totalViews} />
+
+      <ResumesSection
+        resumes={resumes}
+        onAdd={() => navigation.navigate('MyResumes')}
+        onManage={() => navigation.navigate('MyResumes')}
+        onEdit={(id) => navigation.navigate('ResumeForm', { resumeId: id })}
+      />
+
+      <View style={[AppStyles.jobCard, { marginTop: 8, padding: 8, marginBottom: 20 }]}>
+        <Text style={[AppStyles.jobTitle, { fontSize: 12, marginBottom: 8 }]}>Статусы откликов</Text>
+        <ResponseStatusList 
+          pending={pendingResponses} 
+          viewed={viewedResponses} 
+          accepted={acceptedResponses} 
+          rejected={rejectedResponses} 
+        />
       </View>
-
-      {/* Личная информация */}
-      <View style={[AppStyles.jobCard, { marginTop: 20 }]}>
-        <Text style={[AppStyles.jobTitle, { marginBottom: 16 }]}>Личная информация</Text>
-        
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
-          <Mail size={18} color={Colors.secondary} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Colors.secondary, marginBottom: 2 }}>Email</Text>
-            <Text style={{ fontSize: 16 }}>{user?.email}</Text>
-          </View>
-        </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
-          <User size={18} color={Colors.secondary} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Colors.secondary, marginBottom: 2 }}>Имя</Text>
-            <Text style={{ fontSize: 16 }}>{profile?.full_name || 'Не указано'}</Text>
-          </View>
-        </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
-          <Phone size={18} color={Colors.secondary} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Colors.secondary, marginBottom: 2 }}>Телефон</Text>
-            <Text style={{ fontSize: 16 }}>{profile?.phone || 'Не указан'}</Text>
-          </View>
-        </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 }}>
-          {getContactIcon(profile?.preferred_contact || null)}
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Colors.secondary, marginBottom: 2 }}>Предпочтительный способ связи</Text>
-            <Text style={{ fontSize: 16 }}>{getContactLabel(profile?.preferred_contact || null)}</Text>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          style={[AppStyles.applyButton, { marginTop: 8, flexDirection: 'row', gap: 8, justifyContent: 'center' }]}
-          onPress={() => navigation.navigate('EditProfile')}
-        >
-          <Edit size={20} color={Colors.white} />
-          <Text style={AppStyles.applyButtonText}>Редактировать профиль</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Резюме */}
-      <View style={[AppStyles.jobCard, { marginTop: 16 }]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <FileText size={20} color={Colors.primary} />
-            <Text style={AppStyles.jobTitle}>Мои резюме</Text>
-          </View>
-          <TouchableOpacity 
-            onPress={() => navigation.navigate('MyResumes')}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
-          >
-            <Plus size={18} color={Colors.primary} />
-            <Text style={{ color: Colors.primary, fontSize: 12 }}>Добавить</Text>
-          </TouchableOpacity>
-        </View>
-        
-        <TouchableOpacity
-          style={[AppStyles.applyButton, { backgroundColor: Colors.lightGray, marginTop: 0 }]}
-          onPress={() => navigation.navigate('MyResumes')}
-        >
-          <Text style={{ color: Colors.primary }}>Управление резюме →</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity
-        style={[AppStyles.applyButton, { backgroundColor: Colors.gray, marginTop: 20, flexDirection: 'row', gap: 8, justifyContent: 'center' }]}
-        onPress={handleSignOut}
-      >
-        <LogOut size={20} color={Colors.white} />
-        <Text style={AppStyles.applyButtonText}>Выйти</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }

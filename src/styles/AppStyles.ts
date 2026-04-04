@@ -28,8 +28,8 @@ export const AppStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingTop: 50,
-    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 24,

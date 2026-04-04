@@ -38,10 +38,17 @@ export interface WorkExperience {
   id: string;
   company: string;
   position: string;
-  startDate: string;      // ISO формат: YYYY-MM-DD
-  endDate: string | null; // ISO формат: YYYY-MM-DD
+  startDate: string;
+  endDate: string | null;
   isCurrent: boolean;
   description: string;
+}
+
+// ============ Language ============
+export interface LanguageItem {
+  id: string;
+  name: string;
+  level: string;
 }
 
 // ============ Resume ============
@@ -56,7 +63,10 @@ export interface Resume {
   skills: string[];
   languages: string[];
   file_url: string | null;
+  file_name: string | null;
   is_active: boolean;
+  views: number;
+  last_response_status: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -71,11 +81,4 @@ export interface Profile {
   preferred_contact: 'email' | 'whatsapp' | 'telegram' | null;
   created_at: string;
   updated_at: string;
-}
-
-// ============ Language ============
-export interface LanguageItem {
-  id: string;
-  name: string;
-  level: string;
 }

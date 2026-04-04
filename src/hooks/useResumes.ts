@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUserResumes, createResume, updateResume, deleteResume, setActiveResume, uploadResumeFile } from '../services/resumeService';
-import { Resume } from '../types'; // ← импорт из types, не из resumeService
+import { Resume } from '../types';
 import { useAuth } from '../context/AuthContext';
 
-type CreateResumeData = Omit<Resume, 'id' | 'created_at' | 'updated_at' | 'user_id' | 'file_url'>;
+type CreateResumeData = Omit<Resume, 'id' | 'created_at' | 'updated_at' | 'user_id' | 'file_url' | 'file_name' | 'views' | 'last_response_status'>;
 
 export function useResumes() {
   const { user } = useAuth();
@@ -21,20 +21,20 @@ export function useResumes() {
     staleTime: 1000 * 60,
   });
 
-    
-  const { mutate: addResume, isPending: isAdding } = useMutation({
-    mutationFn: (resumeData: CreateResumeData) => {
-      return createResume({
+  const { mutateAsync: addResume, isPending: isAdding } = useMutation({
+    mutationFn: async (resumeData: CreateResumeData): Promise<Resume> => {
+      const newResume = await createResume({
         ...resumeData,
         user_id: user!.id,
       });
+      return newResume;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 
-  const { mutate: editResume, isPending: isEditing } = useMutation({
+  const { mutateAsync: editResume, isPending: isEditing } = useMutation({
     mutationFn: ({ id, updates }: { id: number; updates: Partial<Resume> }) => {
       return updateResume(id, updates);
     },
@@ -57,12 +57,10 @@ export function useResumes() {
     },
   });
 
-  const { mutate: uploadFile, isPending: isUploading } = useMutation({
+  const { mutateAsync: uploadFile, isPending: isUploading } = useMutation({
     mutationFn: ({ resumeId }: { resumeId: number }) => uploadResumeFile(user!.id, resumeId),
-    onSuccess: (fileUrl, { resumeId }) => {
-      if (fileUrl) {
-        editResume({ id: resumeId, updates: { file_url: fileUrl } });
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 
