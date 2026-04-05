@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,9 +34,10 @@ export default function LoginScreen({ navigation }: any) {
 
   return (
     <View style={[AppStyles.container, { justifyContent: 'center' }]}>
-      <Text style={[AppStyles.title, { fontSize: 32, marginBottom: 40 }]}>
-        Вход
-      </Text>
+      <Image
+        source={require('../../../assets/logo.png')}
+        style={{ width: 250, height: 250, marginBottom: 40, alignItems: 'center', alignSelf: 'center' }}
+      />
 
       <Controller
         control={control}
@@ -59,7 +60,7 @@ export default function LoginScreen({ navigation }: any) {
           </>
         )}
       />
-
+      
       <Controller
         control={control}
         name="password"
@@ -102,5 +103,6 @@ export default function LoginScreen({ navigation }: any) {
         </Text>
       </TouchableOpacity>
     </View>
+    
   );
 }

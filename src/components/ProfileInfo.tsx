@@ -25,7 +25,7 @@ export default function ProfileInfo({ profile, email, onEdit }: ProfileInfoProps
         <Text style={{ color: Colors.secondary, width: 70, fontSize: 12 }}>Телефон:</Text>
         <Text style={{ fontSize: 12 }}>{profile?.phone || 'Не указан'}</Text>
       </View>
-      <TouchableOpacity style={[AppStyles.applyButton, { marginTop: 8, paddingVertical: 8 }]} onPress={onEdit}>
+      <TouchableOpacity style={[AppStyles.applyButton, { marginTop: 8, paddingVertical: 8, width: 130 }]} onPress={onEdit}>
         <Edit size={14} color={Colors.white} />
         <Text style={[AppStyles.applyButtonText, { fontSize: 12 }]}>Редактировать</Text>
       </TouchableOpacity>

@@ -14,31 +14,31 @@ export default function ResponseStatusList({ pending, viewed, accepted, rejected
     <View style={{ gap: 4 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Clock size={10} color="#d97706" />
-          <Text style={{ fontSize: 10 }}>На рассмотрении</Text>
+          <Clock size={16} color="#d97706" />
+          <Text style={{ fontSize: 16 }}>На рассмотрении</Text>
         </View>
-        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{pending}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{pending}</Text>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Eye size={10} color="#2563eb" />
-          <Text style={{ fontSize: 10 }}>Просмотрено</Text>
+          <Eye size={16} color="#2563eb" />
+          <Text style={{ fontSize: 16 }}>Просмотрено</Text>
         </View>
-        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{viewed}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 12}}>{viewed}</Text>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <CheckCircle size={10} color="#059669" />
-          <Text style={{ fontSize: 10 }}>Приглашения</Text>
+          <CheckCircle size={16} color="#059669" />
+          <Text style={{ fontSize: 16 }}>Приглашения</Text>
         </View>
-        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{accepted}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{accepted}</Text>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <XCircle size={10} color="#dc2626" />
-          <Text style={{ fontSize: 10 }}>Отказы</Text>
+          <XCircle size={16} color="#dc2626" />
+          <Text style={{ fontSize: 16 }}>Отказы</Text>
         </View>
-        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{rejected}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{rejected}</Text>
       </View>
     </View>
   );
