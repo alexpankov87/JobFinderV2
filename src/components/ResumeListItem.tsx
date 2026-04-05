@@ -20,26 +20,26 @@ export default function ResumeListItem({ resume, onPress }: ResumeListItemProps)
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <FileText size={14} color={Colors.primary} />
-            <Text style={{ fontWeight: 'bold', fontSize: 13 }}>{resume.title}</Text>
+            <FileText size={18} color={Colors.primary} />
+            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{resume.title}</Text>
             {resume.is_active && (
               <View style={{ backgroundColor: Colors.primary, paddingHorizontal: 4, paddingVertical: 1, borderRadius: 6 }}>
-                <Text style={{ color: Colors.white, fontSize: 8 }}>Активно</Text>
+                <Text style={{ color: Colors.white, fontSize: 12 }}>Активно</Text>
               </View>
             )}
           </View>
           <Text style={{ fontSize: 11, color: Colors.secondary }}>{resume.position}</Text>
           {resume.file_url && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
-              <File size={9} color={Colors.secondary} />
-              <Text style={{ fontSize: 9, color: Colors.secondary }}>PDF</Text>
+              <File size={12} color={Colors.secondary} />
+              <Text style={{ fontSize: 12, color: Colors.secondary }}>PDF</Text>
             </View>
           )}
         </View>
         <View style={{ alignItems: 'flex-end' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Eye size={10} color={Colors.secondary} />
-            <Text style={{ fontSize: 10, color: Colors.secondary }}>{resume.views || 0}</Text>
+            <Eye size={12} color={Colors.secondary} />
+            <Text style={{ fontSize: 12, color: Colors.secondary }}>{resume.views || 0}</Text>
           </View>
         </View>
       </View>

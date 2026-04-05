@@ -1,6 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Star, MapPin, DollarSign, Heart, Trash2 } from 'lucide-react-native';
 import { useFavorites } from '../context/FavoritesContext';
 import { AppStyles, Colors } from '../styles/AppStyles';
 import { Job } from '../types';
@@ -23,18 +24,27 @@ export default function FavoritesScreen() {
           <View style={{ flex: 1 }}>
             <Text style={AppStyles.jobTitle}>{item.title}</Text>
             <Text style={AppStyles.jobCompany}>{item.company}</Text>
-            <Text style={AppStyles.jobCountry}>
-              📍 {item.location}, {item.country}
-            </Text>
-            {item.salary_min && (
-              <Text style={{ fontSize: 12, color: Colors.primary, marginTop: 8 }}>
-                💰 {item.salary_min.toLocaleString()} {item.currency}
-                {item.salary_max ? ` - ${item.salary_max.toLocaleString()} ${item.currency}` : ''}
+            
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
+              <MapPin size={12} color={Colors.secondary} />
+              <Text style={[AppStyles.jobCountry, { marginLeft: 4 }]}>
+                {item.location}, {item.country}
               </Text>
+            </View>
+            
+            {item.salary_min && (
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
+                <DollarSign size={12} color={Colors.primary} />
+                <Text style={{ fontSize: 12, color: Colors.primary, marginLeft: 4 }}>
+                  {item.salary_min.toLocaleString()} {item.currency}
+                  {item.salary_max ? ` - ${item.salary_max.toLocaleString()} ${item.currency}` : ''}
+                </Text>
+              </View>
             )}
           </View>
+          
           <TouchableOpacity onPress={() => removeFromFavorites(item.id)}>
-            <Text style={{ fontSize: 24, color: '#FFD700' }}>★</Text>
+            <Trash2 size={20} color={Colors.gray} />
           </TouchableOpacity>
         </View>
       </View>
@@ -52,12 +62,10 @@ export default function FavoritesScreen() {
 
   if (favorites.length === 0) {
     return (
-      <View style={[AppStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <Text style={[AppStyles.logoIcon, { fontSize: 48 }]}>⭐</Text>
-        <Text style={[AppStyles.title, { fontSize: 20, marginTop: 16 }]}>
-          Нет избранных вакансий
-        </Text>
-        <Text style={{ textAlign: 'center', color: Colors.secondary, marginTop: 8 }}>
+      <View style={AppStyles.emptyContainer}>
+        <Heart size={48} color={Colors.secondary} />
+        <Text style={AppStyles.emptyText}>Нет избранных вакансий</Text>
+        <Text style={[AppStyles.emptyText, { fontSize: 14, marginTop: 8 }]}>
           Добавляйте вакансии в избранное, чтобы не потерять
         </Text>
       </View>
@@ -67,7 +75,7 @@ export default function FavoritesScreen() {
   return (
     <View style={AppStyles.container}>
       <View style={AppStyles.header}>
-        <Text style={AppStyles.logoIcon}>⭐</Text>
+        <Star size={28} color={Colors.primary} />
         <Text style={AppStyles.logoText}>Избранное</Text>
       </View>
       
@@ -80,7 +88,7 @@ export default function FavoritesScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderJobCard}
         showsVerticalScrollIndicator={false}
-        onRefresh={() => refetch()}
+        onRefresh={refetch}
         refreshing={loading}
       />
     </View>

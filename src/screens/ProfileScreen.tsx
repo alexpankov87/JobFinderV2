@@ -73,7 +73,7 @@ export default function ProfileScreen() {
       />
 
       <View style={[AppStyles.jobCard, { marginTop: 8, padding: 8, marginBottom: 20 }]}>
-        <Text style={[AppStyles.jobTitle, { fontSize: 14, marginBottom: 8 }]}>Статусы откликов</Text>
+        <Text style={[AppStyles.jobTitle, { fontSize: 16, marginBottom: 8 }]}>Статусы откликов</Text>
         <ResponseStatusList 
           pending={pendingResponses} 
           viewed={viewedResponses} 

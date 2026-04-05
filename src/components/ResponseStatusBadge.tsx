@@ -12,7 +12,7 @@ export default function ResponseStatusBadge({ status }: Props) {
 
   return (
     <View style={[AppStyles.statusBadge, { backgroundColor: config.bgColor, flexDirection: 'row', alignItems: 'center', gap: 6 }]}>
-      <StatusIcon size={12} color={config.color} />
+      <StatusIcon size={18} color={config.color} />
       <Text style={[AppStyles.statusText, { color: config.color }]}>
         {config.label}
       </Text>

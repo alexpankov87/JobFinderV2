@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../context/AuthContext';
@@ -13,24 +13,37 @@ export default function LoginScreen({ navigation }: any) {
   const { theme, setTheme, colors } = useTheme();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const autoSubmitTriggered = useRef(false); 
 
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
 
+  const email = watch('email');
+  const password = watch('password');
+
   const onSubmit = async (data: LoginFormData) => {
+    if (loading) return;
     setLoading(true);
     const { error } = await signIn(data.email, data.password);
     setLoading(false);
     if (error) Alert.alert('Ошибка', error.message);
   };
 
-  // Защита от пустого colors (пока тема не загрузилась)
+  // Автоматический вход после заполнения полей (один раз)
+  useEffect(() => {
+    if (email && password && !loading && !autoSubmitTriggered.current) {
+      autoSubmitTriggered.current = true;
+      handleSubmit(onSubmit)();
+    }
+  }, [email, password, loading]);
+
   if (!colors) return null;
 
   return (
@@ -55,6 +68,7 @@ export default function LoginScreen({ navigation }: any) {
         resizeMode="contain"
       />
 
+      {/* Email */}
       <Controller
         control={control}
         name="email"
@@ -73,6 +87,7 @@ export default function LoginScreen({ navigation }: any) {
         )}
       />
       
+      {/* Пароль */}
       <Controller
         control={control}
         name="password"
