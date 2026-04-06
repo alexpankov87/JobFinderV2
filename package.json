@@ -48,9 +48,5 @@
     "supabase": "^2.84.7",
     "typescript": "~5.3.3"
   },
-  "overrides": {
-    "react-native-safe-area-context": "4.14.1",
-    "react-native-screens": "4.9.0"
-  },
   "private": true
 }
