@@ -3,8 +3,9 @@
     "version": ">= 18.5.0",
     "appVersionSource": "remote"
   },
-  "build": {
+   "build": {
     "development": {
+      "node": "20.19.4",
       "developmentClient": true,
       "distribution": "internal"
     },
@@ -12,7 +13,8 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "node": "20.19.4"
     }
   },
   "submit": {
