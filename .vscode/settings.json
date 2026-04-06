@@ -5,5 +5,10 @@
         "./supabase/functions"
     ],
     "deno.importMap": "./deno.json",
-    "deno.config": "./deno.json"
+    "deno.config": "./deno.json",
+    "files.watcherExclude": {
+        "**/node_modules/**": true
+    },
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.errorSquiggles": "disabled"
 }
